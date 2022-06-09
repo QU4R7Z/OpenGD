@@ -1,6 +1,15 @@
+import os
+
 import pyglet
 
-window = pyglet.window.Window(1280, 720, resizable=True)
+
+def load_file(filename: str):
+    return os.path.join(os.path.dirname(__file__), filename)
+
+
+window = pyglet.window.Window(1280, 720, "Buttercraft", resizable=True)
+window_icon = pyglet.image.load(load_file("Resources/Icon/Buttercraft.ico"))
+window.set_icon(window_icon)
 
 
 @window.event

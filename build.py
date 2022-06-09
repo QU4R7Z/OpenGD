@@ -13,10 +13,15 @@ try:
 
     if system == 'Windows':
         requirements_txt.run()
+
+        icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/Icon/Buttercraft.ico")
+        IconFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources/Icon")
+
         command = f"python -m nuitka --mingw64 --show-modules --follow-imports " \
                   f"--windows-company-name=QU4R7Z --windows-product-version={config.version} " \
                   f"--output-dir=Buttercraft-build --verbose --assume-yes-for-downloads " \
-                  f"--windows-icon-from-ico={os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Icon/Buttercraft.ico')} " \
+                  f"--windows-icon-from-ico={icon} --standalone --onefile " \
+                  f"--include-data-dir={IconFolder}=Icon " \
                   f"Buttercraft.py"
 
         start = time.time()
