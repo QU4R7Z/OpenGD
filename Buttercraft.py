@@ -1,5 +1,6 @@
 import os
 import pyglet
+from pyglet import gl
 
 from Utils import jsonreader
 
@@ -17,7 +18,8 @@ pyglet.font.add_file(load_file("Font/GmarketSansTTFMedium.ttf"))
 GmarketSansTTFMedium = pyglet.font.load('GmarketSansTTFMedium', 16)
 ################################################################################
 
-window = pyglet.window.Window(1280, 720, "Buttercraft", resizable=False)
+glconfig = gl.Config(double_buffer=True)
+window = pyglet.window.Window(1280, 720, "Buttercraft", resizable=False, fullscreen=True, config=glconfig)
 window_icon = pyglet.image.load(load_file("Icon/Buttercraft.ico"))
 window.set_icon(window_icon)
 
@@ -33,12 +35,12 @@ def on_resize(width, height):
     print(f"Window resized to ({width}, {height})")
 
 
-versionlabel = pyglet.text.Label(f'v{config.version}', font_name='Gmarket Sans TTF Medium',
+versionlabel = pyglet.text.Label(f'Buttercraft {config.version}', font_name='Gmarket Sans TTF Medium',
                                  font_size=window_height / 30,
                                  x=window_width / 90, y=window_height / 42, anchor_x='left', anchor_y='baseline',
                                  color=(255, 255, 255, 255), width=200, height=100)
 
-qu4r7zlabel = pyglet.text.Label(f'QU4R7Z', font_name='Gmarket Sans TTF Medium',
+qu4r7zlabel = pyglet.text.Label(f'Copyright QU4R7Z. Do not Distribute!', font_name='Gmarket Sans TTF Medium',
                                 font_size=window.height / 30,
                                 x=window_width - window_width / 90, y=window_height / 42, anchor_x='right',
                                 anchor_y='baseline',
