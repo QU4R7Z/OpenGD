@@ -1,8 +1,12 @@
 import os
-import pyglet
-from pyglet import gl
+import sys
+
+import pygame
 
 from Utils import jsonreader
+from OpenGL.GL import *
+from OpenGL.GLU import *
+from pygame.locals import *
 
 
 def load_file(filename):
@@ -10,53 +14,39 @@ def load_file(filename):
 
 
 config = jsonreader.get(load_file("Config/config.json"))
+# //////////////////////////////////////////////////////////////////////////////
+pygame.init()
+icon = pygame.image.load(load_file("Icon/Buttercraft.png"))
+pygame.display.set_icon(icon)
+flags = DOUBLEBUF | FULLSCREEN | OPENGL
+screen = pygame.display.set_mode((0, 0), flags)
+screenx, screeny = screen.get_size()
+pygame.display.set_caption("Buttercraft")
+clock = pygame.time.Clock()
+# //////////////////////////////////////////////////////////////////////////////
+MediumFont = pygame.font.Font(load_file("Font/GmarketSansTTFMedium.ttf"), int(screeny/20))
+BoldFont = pygame.font.Font(load_file("Font/GmarketSansTTFBold.ttf"), int(screeny/20))
+LightFont = pygame.font.Font(load_file("Font/GmarketSansTTFLight.ttf"), int(screeny/20))
+# //////////////////////////////////////////////////////////////////////////////
+Loop = True
+while Loop:
+    events = pygame.event.get()
+    if events:
+        for event in events:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                Loop = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pass
+            if event.type == pygame.MOUSEWHEEL:
+                pass
 
-# Font#######################################################################
-pyglet.font.add_file(load_file("Font/GmarketSansTTFBold.ttf"))
-GmarketSansTTFBold = pyglet.font.load('GmarketSansTTFBold', 48)
-pyglet.font.add_file(load_file("Font/GmarketSansTTFMedium.ttf"))
-GmarketSansTTFMedium = pyglet.font.load('GmarketSansTTFMedium', 48)
-################################################################################
+    dt = clock.tick(60)
+    glClearColor(1, 1, 1, 1)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    pygame.display.flip()
 
-display = pyglet.canvas.Display()
-screen = display.get_default_screen()
-screen_width = screen.width
-screen_height = screen.height
-print(screen_width, screen_height)
-
-glconfig = gl.Config(double_buffer=True)
-window = pyglet.window.Window(1280, 720, "Buttercraft", resizable=False, fullscreen=True, config=glconfig)
-window_icon = pyglet.image.load(load_file("Icon/Buttercraft.ico"))
-window.set_icon(window_icon)
-
-################################################################################
-window_width = window.width
-window_height = window.height
-
-
-#################################################################################
-
-versionlabel = pyglet.text.Label(f'Buttercraft {config.version}', font_name='Gmarket Sans TTF Medium',
-                                 font_size=window_height / 30,
-                                 x=window_width / 90, y=window_height / 42, anchor_x='left', anchor_y='baseline',
-                                 color=(255, 255, 255, 255), width=200, height=100)
-
-qu4r7zlabel = pyglet.text.Label(f'Copyright QU4R7Z. Do not Distribute!', font_name='Gmarket Sans TTF Medium',
-                                font_size=window.height / 30,
-                                x=window_width - window_width / 90, y=window_height / 42, anchor_x='right',
-                                anchor_y='baseline',
-                                color=(255, 255, 255, 255), width=200, height=100)
-
-
-@window.event
-def on_draw():
-    window.clear()
-
-    # BottomOverlayInfo##############################################################
-    versionlabel.draw()
-    qu4r7zlabel.draw()
-    #################################################################################
-
-
-if __name__ == '__main__':
-    pyglet.app.run()
+pygame.quit()
+sys.exit()
