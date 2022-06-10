@@ -13,10 +13,16 @@ config = jsonreader.get(load_file("Config/config.json"))
 
 # Font#######################################################################
 pyglet.font.add_file(load_file("Font/GmarketSansTTFBold.ttf"))
-GmarketSansTTFBold = pyglet.font.load('GmarketSansTTFBold', 16)
+GmarketSansTTFBold = pyglet.font.load('GmarketSansTTFBold', 48)
 pyglet.font.add_file(load_file("Font/GmarketSansTTFMedium.ttf"))
-GmarketSansTTFMedium = pyglet.font.load('GmarketSansTTFMedium', 16)
+GmarketSansTTFMedium = pyglet.font.load('GmarketSansTTFMedium', 48)
 ################################################################################
+
+display = pyglet.canvas.Display()
+screen = display.get_default_screen()
+screen_width = screen.width
+screen_height = screen.height
+print(screen_width, screen_height)
 
 glconfig = gl.Config(double_buffer=True)
 window = pyglet.window.Window(1280, 720, "Buttercraft", resizable=False, fullscreen=True, config=glconfig)
@@ -29,11 +35,6 @@ window_height = window.height
 
 
 #################################################################################
-
-@window.event
-def on_resize(width, height):
-    print(f"Window resized to ({width}, {height})")
-
 
 versionlabel = pyglet.text.Label(f'Buttercraft {config.version}', font_name='Gmarket Sans TTF Medium',
                                  font_size=window_height / 30,
