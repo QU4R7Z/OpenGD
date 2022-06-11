@@ -1,6 +1,4 @@
 Nuitka==0.8.4
 ordered-set==4.1.0
-pygame==2.1.2
-PyOpenGL==3.1.6
-PyOpenGL-accelerate==3.1.6
+pyglet==1.5.26
 zstandard==0.17.0

@@ -1,52 +1,69 @@
 import os
-import sys
-
-import pygame
-
+import pyglet
+# //////////////////////////////////////////////////////////////////////////////
+from pyglet.gl import *
 from Utils import jsonreader
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from pygame.locals import *
 
 
+# //////////////////////////////////////////////////////////////////////////////
 def load_file(filename):
     return os.path.join(os.path.dirname(__file__), filename)
 
 
+# //////////////////////////////////////////////////////////////////////////////
 config = jsonreader.get(load_file("Config/config.json"))
 # //////////////////////////////////////////////////////////////////////////////
-pygame.init()
-icon = pygame.image.load(load_file("Icon/Buttercraft.png"))
-pygame.display.set_icon(icon)
-flags = DOUBLEBUF | FULLSCREEN | OPENGL
-screen = pygame.display.set_mode((0, 0), flags)
-screenx, screeny = screen.get_size()
-pygame.display.set_caption("Buttercraft")
-clock = pygame.time.Clock()
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 # //////////////////////////////////////////////////////////////////////////////
-MediumFont = pygame.font.Font(load_file("Font/GmarketSansTTFMedium.ttf"), int(screeny/20))
-BoldFont = pygame.font.Font(load_file("Font/GmarketSansTTFBold.ttf"), int(screeny/20))
-LightFont = pygame.font.Font(load_file("Font/GmarketSansTTFLight.ttf"), int(screeny/20))
+pyglet.font.add_file(load_file("Font/GmarketSansTTFBold.ttf"))
+GmarketSansTTFBold = pyglet.font.load('GmarketSansTTFBold', 16)
+pyglet.font.add_file(load_file("Font/GmarketSansTTFMedium.ttf"))
+GmarketSansTTFMedium = pyglet.font.load('GmarketSansTTFMedium', 16)
+pyglet.font.add_file(load_file("Font/GmarketSansTTFLight.ttf"))
+GmarketSansTTFLight = pyglet.font.load('GmarketSansTTFLight', 16)
 # //////////////////////////////////////////////////////////////////////////////
-Loop = True
-while Loop:
-    events = pygame.event.get()
-    if events:
-        for event in events:
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                Loop = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pass
-            if event.type == pygame.MOUSEWHEEL:
-                pass
+window = pyglet.window.Window(1280, 720, "Buttercraft", resizable=False, fullscreen=True)
+window_icon = pyglet.image.load(load_file("Icon/Buttercraft.ico"))
+window.set_icon(window_icon)
+# //////////////////////////////////////////////////////////////////////////////
+window_width = window.width
+window_height = window.height
+# //////////////////////////////////////////////////////////////////////////////
+DESIRED_X_SIZE, DESIRED_Y_SIZE = window_height // 2, window_height // 2
+QUARTZ_PNG = pyglet.image.load(load_file("Icon/quartz.png"))
 
-    dt = clock.tick(60)
-    glClearColor(1, 1, 1, 1)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    pygame.display.flip()
 
-pygame.quit()
-sys.exit()
+# //////////////////////////////////////////////////////////////////////////////
+@window.event
+def on_resize(width, height):
+    print(f"Window resized to ({width}, {height})")
+
+
+# //////////////////////////////////////////////////////////////////////////////
+versionlabel = pyglet.text.Label(f'Buttercraft {config.version}', font_name='Gmarket Sans TTF Medium',
+                                 font_size=window_height / 30,
+                                 x=window_width / 90, y=window_height / 42, anchor_x='left', anchor_y='baseline',
+                                 color=(255, 255, 255, 255), width=200, height=100)
+qu4r7zlabel = pyglet.text.Label(f'Copyright QU4R7Z. Do not Distribute!', font_name='Gmarket Sans TTF Medium',
+                                font_size=window.height / 30,
+                                x=window_width - window_width / 90, y=window_height / 42, anchor_x='right',
+                                anchor_y='baseline',
+                                color=(255, 255, 255, 255), width=200, height=100)
+
+
+# //////////////////////////////////////////////////////////////////////////////
+@window.event
+def on_draw():
+    window.clear()
+
+    # //////////////////////////////////////////////////////////////////////////////
+    versionlabel.draw()
+    qu4r7zlabel.draw()
+    # //////////////////////////////////////////////////////////////////////////////
+    # SPLASH SCREEN
+    QUARTZ_PNG.blit((window_width - QUARTZ_PNG.width) // 2, (window_height - QUARTZ_PNG.height) // 2, 0)
+    # //////////////////////////////////////////////////////////////////////////////
+
+
+if __name__ == '__main__':
+    pyglet.app.run()
