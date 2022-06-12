@@ -22,30 +22,28 @@ ICON_image = Image.open(load_file("Icon/Buttercraft.ico"))
 
 
 # //////////////////////////////////////////////////////////////////////////////
-def main():
+def main(window_width, window_height):
     if not glfw.init():
         return
     # //////////////////////////////////////////////////////////////////////////////
-    window = glfw.create_window(1280, 720, "Buttercraft", None, None)
+    window = glfw.create_window(window_width, window_height, "Buttercraft", None, None)
     glfw.set_window_icon(window, 1, ICON_image)
     if not window:
         glfw.terminate()
         return
     glfw.make_context_current(window)
-    # //////////////////////////////////////////////////////////////////////////////\
-    previousTime = glfw.get_time()
-    framecount = 0
+    # //////////////////////////////////////////////////////////////////////////////
+    glEnable(GL_BLEND)
+    glClear(GL_COLOR_BUFFER_BIT)
+    glViewport(0, 0, window_width, window_height)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    # //////////////////////////////////////////////////////////////////////////////
     while not glfw.window_should_close(window):
-        currentTime = glfw.get_time()
-        framecount += 1
-        if (currentTime - previousTime) >= 1:
-            print(framecount)
-            framecount = 0
-            previousTime = currentTime
         glfw.poll_events()
         glfw.swap_buffers(window)
     glfw.terminate()
 
 
 if __name__ == "__main__":
-    main()
+    main(1280, 720)
