@@ -39,9 +39,19 @@ def main(window_width, window_height):
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     # //////////////////////////////////////////////////////////////////////////////
+    last_time = glfw.get_time()
     while not glfw.window_should_close(window):
         glfw.poll_events()
         glfw.swap_buffers(window)
+        # //////////////////////////////////////////////////////////////////////////////
+        # frame_rate_limiter
+        while glfw.get_time() < last_time + 1 / 60:
+            pass
+        last_time += 1 / 60
+        # //////////////////////////////////////////////////////////////////////////////
+        v_width, v_height = glfw.get_window_size(window)
+        glViewport(0, 0, v_width, v_height)
+    glfw.destroy_window(window)
     glfw.terminate()
 
 
