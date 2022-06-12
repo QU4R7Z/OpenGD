@@ -40,6 +40,8 @@ def main(window_width, window_height):
     glLoadIdentity()
     # //////////////////////////////////////////////////////////////////////////////
     last_time = glfw.get_time()
+    fps_previoustime = glfw.get_time()
+    fps_framecount = 0
     while not glfw.window_should_close(window):
         glfw.poll_events()
         glfw.swap_buffers(window)
@@ -48,6 +50,14 @@ def main(window_width, window_height):
         while glfw.get_time() < last_time + 1 / 60:
             pass
         last_time += 1 / 60
+        # //////////////////////////////////////////////////////////////////////////////
+        # fps
+        fps_currentTime = glfw.get_time()
+        fps_framecount += 1
+        if fps_currentTime - fps_previoustime >= 1:
+            print(fps_framecount)
+            fps_framecount = 0
+            fps_previoustime = fps_currentTime
         # //////////////////////////////////////////////////////////////////////////////
         v_width, v_height = glfw.get_window_size(window)
         glViewport(0, 0, v_width, v_height)
