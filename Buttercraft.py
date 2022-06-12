@@ -1,8 +1,12 @@
 import os
-import pyglet
-# //////////////////////////////////////////////////////////////////////////////
-from pyglet.gl import *
+
+import glfw
+import numpy
+
+from OpenGL.GL import *
+
 from Utils import jsonreader
+from PIL import Image
 
 
 # //////////////////////////////////////////////////////////////////////////////
@@ -12,58 +16,36 @@ def load_file(filename):
 
 # //////////////////////////////////////////////////////////////////////////////
 config = jsonreader.get(load_file("Config/config.json"))
+
 # //////////////////////////////////////////////////////////////////////////////
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-# //////////////////////////////////////////////////////////////////////////////
-pyglet.font.add_file(load_file("Font/GmarketSansTTFBold.ttf"))
-GmarketSansTTFBold = pyglet.font.load('GmarketSansTTFBold', 16)
-pyglet.font.add_file(load_file("Font/GmarketSansTTFMedium.ttf"))
-GmarketSansTTFMedium = pyglet.font.load('GmarketSansTTFMedium', 16)
-pyglet.font.add_file(load_file("Font/GmarketSansTTFLight.ttf"))
-GmarketSansTTFLight = pyglet.font.load('GmarketSansTTFLight', 16)
-# //////////////////////////////////////////////////////////////////////////////
-window = pyglet.window.Window(1280, 720, "Buttercraft", resizable=False, fullscreen=True)
-window_icon = pyglet.image.load(load_file("Icon/Buttercraft.ico"))
-window.set_icon(window_icon)
-# //////////////////////////////////////////////////////////////////////////////
-window_width = window.width
-window_height = window.height
-# //////////////////////////////////////////////////////////////////////////////
-DESIRED_X_SIZE, DESIRED_Y_SIZE = window_height // 2, window_height // 2
-QUARTZ_PNG = pyglet.image.load(load_file("Icon/quartz.png"))
+ICON_image = Image.open(load_file("Icon/Buttercraft.ico"))
 
 
 # //////////////////////////////////////////////////////////////////////////////
-@window.event
-def on_resize(width, height):
-    print(f"Window resized to ({width}, {height})")
-
-
-# //////////////////////////////////////////////////////////////////////////////
-versionlabel = pyglet.text.Label(f'Buttercraft {config.version}', font_name='Gmarket Sans TTF Medium',
-                                 font_size=window_height / 30,
-                                 x=window_width / 90, y=window_height / 42, anchor_x='left', anchor_y='baseline',
-                                 color=(255, 255, 255, 255), width=200, height=100)
-qu4r7zlabel = pyglet.text.Label(f'Copyright QU4R7Z. Do not Distribute!', font_name='Gmarket Sans TTF Medium',
-                                font_size=window.height / 30,
-                                x=window_width - window_width / 90, y=window_height / 42, anchor_x='right',
-                                anchor_y='baseline',
-                                color=(255, 255, 255, 255), width=200, height=100)
-
-
-# //////////////////////////////////////////////////////////////////////////////
-@window.event
-def on_draw():
-    window.clear()
-
+def main():
+    if not glfw.init():
+        return
     # //////////////////////////////////////////////////////////////////////////////
-    versionlabel.draw()
-    qu4r7zlabel.draw()
-    # //////////////////////////////////////////////////////////////////////////////
-    # SPLASH SCREEN
-    QUARTZ_PNG.blit((window_width - QUARTZ_PNG.width) // 2, (window_height - QUARTZ_PNG.height) // 2, 0)
-    # //////////////////////////////////////////////////////////////////////////////
+    window = glfw.create_window(1280, 720, "Buttercraft", None, None)
+    glfw.set_window_icon(window, 1, ICON_image)
+    if not window:
+        glfw.terminate()
+        return
+    glfw.make_context_current(window)
+    # //////////////////////////////////////////////////////////////////////////////\
+    previousTime = glfw.get_time()
+    framecount = 0
+    while not glfw.window_should_close(window):
+        currentTime = glfw.get_time()
+        framecount += 1
+        if (currentTime - previousTime) >= 1:
+            print(framecount)
+            framecount = 0
+            previousTime = currentTime
+        glfw.poll_events()
+        glfw.swap_buffers(window)
+    glfw.terminate()
 
 
-if __name__ == '__main__':
-    pyglet.app.run()
+if __name__ == "__main__":
+    main()

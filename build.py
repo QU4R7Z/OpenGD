@@ -26,6 +26,7 @@ try:
                   f"--include-data-dir={IconFolder}=Icon " \
                   f"--include-data-dir={ConfigFolder}=Config " \
                   f"--include-data-dir={FontFolder}=Font " \
+                  f"--enable-plugin=numpy " \
                   f"--windows-disable-console " \
                   f"Buttercraft.py"
 

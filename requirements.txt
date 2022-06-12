@@ -1,4 +1,8 @@
+glfw==2.5.3
 Nuitka==0.8.4
+numpy==1.22.4
 ordered-set==4.1.0
-pyglet==1.5.26
+Pillow==9.1.1
+PyOpenGL==3.1.6
+PyOpenGL-accelerate==3.1.6
 zstandard==0.17.0
