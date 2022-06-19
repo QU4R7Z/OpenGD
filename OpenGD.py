@@ -16,9 +16,9 @@ def load_file(filename):
 
 # //////////////////////////////////////////////////////////////////////////////
 config = jsonreader.get(load_file("Config/config.json"))
-
+fps = 240
 # //////////////////////////////////////////////////////////////////////////////
-ICON_image = Image.open(load_file("Icon/Buttercraft.ico"))
+ICON_image = Image.open(load_file("Icon/OPENGD.ico"))
 
 
 # //////////////////////////////////////////////////////////////////////////////
@@ -26,8 +26,9 @@ def main(window_width, window_height):
     if not glfw.init():
         return
     # //////////////////////////////////////////////////////////////////////////////
-    window = glfw.create_window(window_width, window_height, "Buttercraft", None, None)
+    window = glfw.create_window(window_width, window_height, "OpenGD", None, None)
     glfw.set_window_icon(window, 1, ICON_image)
+    glfw.set_window_aspect_ratio(window, 16, 9)
     if not window:
         glfw.terminate()
         return
@@ -47,9 +48,9 @@ def main(window_width, window_height):
         glfw.swap_buffers(window)
         # //////////////////////////////////////////////////////////////////////////////
         # frame_rate_limiter
-        while glfw.get_time() < last_time + 1 / 60:
+        while glfw.get_time() < last_time + 1 / fps:
             pass
-        last_time += 1 / 60
+        last_time += 1 / fps
         # //////////////////////////////////////////////////////////////////////////////
         # fps
         fps_currentTime = glfw.get_time()

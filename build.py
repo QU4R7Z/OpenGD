@@ -16,7 +16,9 @@ def build(withconsole):
         if system == 'Windows':
             requirements_txt.run()
 
-            icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Icon/Buttercraft.ico")
+            buildfile_name = "OpenGD.py"
+            Output_dir_name = "Open-Geometry-Dash-build"
+            icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Icon/OPENGD.ico")
             IconFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Icon")
             ConfigFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Config")
             FontFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Font")
@@ -24,7 +26,7 @@ def build(withconsole):
             if withconsole:
                 command = f"python -m nuitka --mingw64 --show-modules --follow-imports " \
                           f"--windows-company-name=QU4R7Z --windows-product-version={config.version} " \
-                          f"--output-dir=Buttercraft-build --verbose --assume-yes-for-downloads " \
+                          f"--output-dir={Output_dir_name} --verbose --assume-yes-for-downloads " \
                           f"--windows-icon-from-ico={icon} --onefile " \
                           f"--include-data-dir={IconFolder}=Icon " \
                           f"--include-data-dir={ConfigFolder}=Config " \
@@ -32,11 +34,11 @@ def build(withconsole):
                           f"--include-package=OpenGL_accelerate " \
                           f"--include-package=PIL " \
                           f"--enable-plugin=numpy " \
-                          f"Buttercraft.py"
+                          f"{buildfile_name}"
             else:
                 command = f"python -m nuitka --mingw64 --show-modules --follow-imports " \
                           f"--windows-company-name=QU4R7Z --windows-product-version={config.version} " \
-                          f"--output-dir=Buttercraft-build --verbose --assume-yes-for-downloads " \
+                          f"--output-dir={Output_dir_name} --verbose --assume-yes-for-downloads " \
                           f"--windows-icon-from-ico={icon} --onefile " \
                           f"--include-data-dir={IconFolder}=Icon " \
                           f"--include-data-dir={ConfigFolder}=Config " \
@@ -45,7 +47,7 @@ def build(withconsole):
                           f"--include-package=PIL " \
                           f"--enable-plugin=numpy " \
                           f"--windows-disable-console " \
-                          f"Buttercraft.py"
+                          f"{buildfile_name}"
 
             start = time.time()
             subprocess.run(command.split(' '), shell=True, check=True)
