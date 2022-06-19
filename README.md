@@ -1,2 +1,2 @@
-# Buttercraft
+# OpenGD
 Buttercraft
