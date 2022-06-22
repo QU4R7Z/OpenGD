@@ -22,6 +22,7 @@ def build(withconsole):
             IconFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Icon")
             ConfigFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Config")
             FontFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Font")
+            ResourcesFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Resources")
 
             if withconsole:
                 command = f"python -m nuitka --mingw64 --show-modules --follow-imports " \
@@ -31,6 +32,7 @@ def build(withconsole):
                           f"--include-data-dir={IconFolder}=Icon " \
                           f"--include-data-dir={ConfigFolder}=Config " \
                           f"--include-data-dir={FontFolder}=Font " \
+                          f"--include-data-dir={ResourcesFolder}=Resources " \
                           f"--include-package=OpenGL_accelerate " \
                           f"--include-package=PIL " \
                           f"--enable-plugin=numpy " \
@@ -43,6 +45,7 @@ def build(withconsole):
                           f"--include-data-dir={IconFolder}=Icon " \
                           f"--include-data-dir={ConfigFolder}=Config " \
                           f"--include-data-dir={FontFolder}=Font " \
+                          f"--include-data-dir={ResourcesFolder}=Resources " \
                           f"--include-package=OpenGL_accelerate " \
                           f"--include-package=PIL " \
                           f"--enable-plugin=numpy " \

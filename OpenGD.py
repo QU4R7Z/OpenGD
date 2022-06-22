@@ -1,10 +1,10 @@
 import os
+from array import array
 
 import glfw
 import numpy
 
 from OpenGL.GL import *
-
 from Utils import jsonreader
 from PIL import Image
 
@@ -22,7 +22,7 @@ ICON_image = Image.open(load_file("Icon/OPENGD.ico"))
 
 
 # //////////////////////////////////////////////////////////////////////////////
-def main(window_width, window_height):
+def main(window_width, window_height, dev=True):
     if not glfw.init():
         return
     # //////////////////////////////////////////////////////////////////////////////
@@ -33,9 +33,47 @@ def main(window_width, window_height):
         glfw.terminate()
         return
     glfw.make_context_current(window)
+
     # //////////////////////////////////////////////////////////////////////////////
-    glEnable(GL_BLEND)
-    glClear(GL_COLOR_BUFFER_BIT)
+    def loadTexture(texture):
+        try:
+            texx = Image.open(texture)
+        except IOError as e:
+            print("Failed to open texture file: ", texture)
+            texx = Image.open(load_file("Resources/null.png"))
+
+        texxData = list(texx.getdata())
+        texxID = glGenTextures(1)
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+        glBindTexture(GL_TEXTURE_2D, texxID)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texx.size[0], texx.size[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, texxData)
+        texx.close()
+        return texxID
+
+    def drawQuad(centerX, centerY, textureID):
+        verts = ((1, 1), (1, -1), (-1, -1), (-1, 1))
+        texts = ((1, 0), (1, 1), (0, 1), (0, 0))
+        surf = (0, 1, 2, 3)
+
+        glEnable(GL_TEXTURE_2D)
+        glBindTexture(GL_TEXTURE_2D, textureID)
+
+        glBegin(GL_QUADS)
+        for i in surf:
+            glTexCoord2f(texts[i][0], texts[i][1])
+            glVertex2f(centerX + verts[i][0], centerY + verts[i][1])
+        glEnd()
+        glDisable(GL_TEXTURE_2D)
+
+    # //////////////////////////////////////////////////////////////////////////////
+    bg_0_0_0_0_0_0_textureID = loadTexture(load_file("Resources/bg_0_0_0_0_0_0.png"))
+    # //////////////////////////////////////////////////////////////////////////////
     glViewport(0, 0, window_width, window_height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -43,12 +81,17 @@ def main(window_width, window_height):
     last_time = glfw.get_time()
     fps_previoustime = glfw.get_time()
     fps_framecount = 0
+    # //////////////////////////////////////////////////////////////////////////////
     while not glfw.window_should_close(window):
         glfw.poll_events()
+
+        glClear(GL_COLOR_BUFFER_BIT)
+        drawQuad(0, 0, bg_0_0_0_0_0_0_textureID)
+
         glfw.swap_buffers(window)
         # //////////////////////////////////////////////////////////////////////////////
         # frame_rate_limiter
-        while glfw.get_time() < last_time + 1 / fps:
+        while glfw.get_time() <= last_time + 1 / fps:
             pass
         last_time += 1 / fps
         # //////////////////////////////////////////////////////////////////////////////
@@ -56,7 +99,8 @@ def main(window_width, window_height):
         fps_currentTime = glfw.get_time()
         fps_framecount += 1
         if fps_currentTime - fps_previoustime >= 1:
-            print(fps_framecount)
+            if dev:
+                print(fps_framecount)
             fps_framecount = 0
             fps_previoustime = fps_currentTime
         # //////////////////////////////////////////////////////////////////////////////
@@ -67,4 +111,4 @@ def main(window_width, window_height):
 
 
 if __name__ == "__main__":
-    main(1280, 720)
+    main(window_width=1280, window_height=720, dev=True)
