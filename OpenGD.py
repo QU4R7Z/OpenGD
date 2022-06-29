@@ -1,6 +1,4 @@
 import os
-import random
-from array import array
 
 import glfw
 import numpy
